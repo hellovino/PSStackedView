@@ -82,7 +82,8 @@ typedef void(^PSSVSimpleBlock)(void);
 
 - (void)configureGestureRecognizer
 {
-    [self.view removeGestureRecognizer:self.panRecognizer];
+    if (self.isViewLoaded && self.panRecognizer)
+        [self.view removeGestureRecognizer:self.panRecognizer];
     
     // add a gesture recognizer to detect dragging to the guest controllers
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
@@ -96,8 +97,10 @@ typedef void(^PSSVSimpleBlock)(void);
     [panRecognizer setDelaysTouchesEnded:YES];
     [panRecognizer setCancelsTouchesInView:YES];
     panRecognizer.delegate = self;
-    [self.view addGestureRecognizer:panRecognizer];
     self.panRecognizer = panRecognizer;
+    
+    if (self.isViewLoaded)
+        [self.view addGestureRecognizer:panRecognizer];
 }
 
 #pragma mark - Initialization
@@ -1477,6 +1480,8 @@ enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.view addGestureRecognizer:self.panRecognizer];
     
     // embedding rootViewController
     if (self.rootViewController) {
