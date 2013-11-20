@@ -1028,7 +1028,7 @@ enum {
     }
     
     // Starting out in portrait, right side up, we see a 20 pixel gap (for status bar???)
-    viewController.view.top = 0.f;
+    viewController.view.top = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 20.f : 0.f;
     
     [self delegateWillInsertViewController:viewController];
     
